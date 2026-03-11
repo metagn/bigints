@@ -988,5 +988,5 @@ proc main() =
     doAssert succ(a, 3) == initBigInt(10)
 
 
-# static: main()
+static: main()
 main()
