@@ -252,6 +252,16 @@ proc main() =
       a *= b
       doAssert a == zero
 
+    block: # large multiplication
+      let
+        a = "6277101735386680763835789123314955362437298222279840143829".initBigInt
+        b = "1461501637330902918203684832716283019655932313743".initBigInt
+        c = "9173994463960286046443283142914659534651409302161170887881670097401563075560864837488946597716929873341947".initBigInt
+      doAssert a * b == c
+      doAssert -a * b == -c
+      doAssert a * -b == -c
+      doAssert -a * -b == c
+
   block: # shift
     let
       x = "190485713846014693847".initBigInt
