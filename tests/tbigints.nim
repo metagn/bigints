@@ -232,6 +232,11 @@ proc main() =
       doAssert -a * b == -c
       doAssert a * -b == -c
       doAssert -a * -b == c
+      # commutative:
+      doAssert b * a == c
+      doAssert -b * a == -c
+      doAssert b * -a == -c
+      doAssert -b * -a == c
 
     block: # self-multiplication
       var a = 12.initBigInt
@@ -261,6 +266,26 @@ proc main() =
       doAssert -a * b == -c
       doAssert a * -b == -c
       doAssert -a * -b == c
+      # commutative:
+      doAssert b * a == c
+      doAssert -b * a == -c
+      doAssert b * -a == -c
+      doAssert -b * -a == c
+    
+    block: # big by small multiplication
+      let
+        a = "9173994463960286046443283142914659534651409302161170887881670097401563075560864837488946597716929873341947".initBigInt
+        b = "155".initBigInt
+        c = "1421969141913844337198708887151772227870968441834981487621658865097242276711934049810786722646124130368001785".initBigInt
+      doAssert a * b == c
+      doAssert -a * b == -c
+      doAssert a * -b == -c
+      doAssert -a * -b == c
+      # commutative:
+      doAssert b * a == c
+      doAssert -b * a == -c
+      doAssert b * -a == -c
+      doAssert -b * -a == c
 
   block: # shift
     let

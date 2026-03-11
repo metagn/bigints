@@ -486,7 +486,7 @@ func unsignedKaratsubaMultiplication(a: var BigInt, bLimbs, cLimbs: openArray[Li
   let
     bl = bLimbs.len
     cl = cLimbs.len
-    n = max(bl, cl)
+    n = min(bl, cl)
     k = n shr 1
   if bl == 1:
     # base case : multiply the only limb with each limb of second term
