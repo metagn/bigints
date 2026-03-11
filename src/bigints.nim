@@ -78,7 +78,6 @@ func initBigInt*(val: BigInt): BigInt =
 const
   zero = initBigInt(0)
   one = initBigInt(1)
-  karatsubaThreshold = 80
 
 func isZeroLimbs(limbs: openArray[Limb]): bool {.inline.} =
   limbs.len == 0 or (limbs.len == 1 and limbs[0] == 0)
@@ -449,6 +448,9 @@ func unsignedMultiplicationInt(a: var BigInt, bLimbs: openArray[Limb], c: uint32
 
   a.limbs[bl] = uint32(tmp)
   normalize(a)
+
+const
+  karatsubaThreshold = 80
 
 func unsignedKaratsubaMultiplication(a: var BigInt, bLimbs, cLimbs: openArray[Limb])
 
