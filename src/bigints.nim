@@ -450,10 +450,7 @@ func unsignedMultiplicationInt(a: var BigInt, bLimbs: openArray[Limb], c: uint32
   a.limbs[bl] = uint32(tmp)
   normalize(a)
 
-# forward declaration for use in `multiplication`
 func unsignedKaratsubaMultiplication(a: var BigInt, bLimbs, cLimbs: openArray[Limb])
-func `shl`*(x: BigInt, y: Natural): BigInt
-func `shr`*(x: BigInt, y: Natural): BigInt
 
 func unsignedMultiplication(a: var BigInt, bLimbs, cLimbs: openArray[Limb]) =
   # a = b * c
@@ -478,6 +475,9 @@ func unsignedMultiplication(a: var BigInt, bLimbs, cLimbs: openArray[Limb]) =
 func multiplication(a: var BigInt, b, c: BigInt) =
   unsignedMultiplication(a, b.limbs, c.limbs)
   a.isNegative = b.isNegative xor c.isNegative
+
+func `shl`*(x: BigInt, y: Natural): BigInt
+func `shr`*(x: BigInt, y: Natural): BigInt
 
 func unsignedKaratsubaMultiplication(a: var BigInt, bLimbs, cLimbs: openArray[Limb]) =
   if bLimbs.isZeroLimbs or cLimbs.isZeroLimbs:
@@ -1395,106 +1395,3 @@ func powmod*(base, exponent, modulus: BigInt): BigInt =
         result = (result * basePow) mod modulus
       basePow = (basePow * basePow) mod modulus
       exponent = exponent shr 1
-
-when isMainModule:
-  var a, b, c: BigInt
-  let
-    two = 2.initBigInt
-    three = 3.initBigInt
-    four = 4.initBigInt
-
-  a.limbs = @[1'u32, 2'u32]
-  b.limbs = @[3'u32, 4'u32]
-  echo a.limbs
-  echo b.limbs
-  echo "factors: ", a, " ", b
-  karatsubaMultiplication(c, a, b)
-  echo "product Karatsuba: ", c
-  echo "correct product:   ", a * b
-
-  a.limbs = @[1'u32, 0'u32]
-  b.limbs = @[0'u32, 4'u32]
-  echo a.limbs
-  echo b.limbs
-  echo "factors: ", a, " ", b
-  karatsubaMultiplication(c, a, b)
-  echo "product Karatsuba: ", c
-  echo "correct product:   ", a * b
-
-  a.limbs = @[2'u32, 1'u32]
-  b.limbs = @[3'u32, 4'u32]
-  echo a.limbs
-  echo b.limbs
-  echo "factors: ", a, " ", b
-  karatsubaMultiplication(c, a, b)
-  echo "product Karatsuba: ", c
-  echo "correct product:   ", a * b
-
-  a.limbs = @[2'u32, 1'u32]
-  b.limbs = @[4'u32, 3'u32]
-  echo a.limbs
-  echo b.limbs
-  echo "factors: ", a, " ", b
-  karatsubaMultiplication(c, a, b)
-  echo "product Karatsuba: ", c
-  echo "correct product:   ", a * b
-
-  a.limbs = @[1'u32, 2'u32]
-  b.limbs = @[3'u32, 4'u32]
-  echo a.limbs
-  echo b.limbs
-  echo "factors: ", a, " ", b
-  karatsubaMultiplication(c, a, b)
-  echo "product Karatsuba: ", c
-  echo "correct product:   ", a * b
-
-  a = two shl 32 - one
-  b = four shl 32 - three
-  echo a.limbs
-  echo b.limbs
-  echo "factors: ", a, " ", b
-  karatsubaMultiplication(c, a, b)
-  echo "product Karatsuba: ", c
-  echo "correct product:   ", a * b
-
-  a = -(two shl 32 + one)
-  b = four shl 32 - three
-  echo a.limbs
-  echo b.limbs
-  echo "factors: ", a, " ", b
-  karatsubaMultiplication(c, a, b)
-  echo "product Karatsuba: ", c
-  echo "correct product:   ", a * b
-
-  a.limbs = @[1'u32, 2'u32, 3'u32]
-  b.limbs = @[4'u32, 5'u32, 6'u32]
-  a.isNegative = false
-  b.isNegative = false
-  echo a.limbs
-  echo b.limbs
-  echo "factors: ", a, " ", b
-  karatsubaMultiplication(c, a, b)
-  echo "product Karatsuba: ", c
-  echo "correct product:   ", a * b
-
-  a.limbs = @[1'u32, 2'u32, 3'u32, 4'u32, 5'u32]
-  b.limbs = @[4'u32, 5'u32, 6'u32, 7'u32, 8'u32]
-  a.isNegative = false
-  b.isNegative = false
-  echo a.limbs
-  echo b.limbs
-  echo "factors: ", a, " ", b
-  karatsubaMultiplication(c, a, b)
-  echo "product Karatsuba: ", c
-  echo "correct product:   ", a * b
-
-  a.limbs = @[1'u32, 2'u32, 3'u32, 4'u32, 5'u32, 6'u32, 7'u32, 8'u32, 9'u32, 10'u32]
-  b.limbs = @[10'u32, 9'u32, 8'u32, 7'u32, 6'u32, 5'u32, 4'u32, 3'u32, 2'u32, 1'u32]
-  a.isNegative = false
-  b.isNegative = false
-  echo a.limbs
-  echo b.limbs
-  echo "factors: ", a, " ", b
-  karatsubaMultiplication(c, a, b)
-  echo "product Karatsuba: ", c
-  echo "correct product:   ", a * b
