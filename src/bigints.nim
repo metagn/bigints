@@ -78,7 +78,7 @@ func initBigInt*(val: BigInt): BigInt =
 const
   zero = initBigInt(0)
   one = initBigInt(1)
-  karatsubaThreshold = 2
+  karatsubaThreshold = 80
 
 func isZeroLimbs(limbs: openArray[Limb]): bool {.inline.} =
   limbs.len == 0 or (limbs.len == 1 and limbs[0] == 0)
@@ -495,17 +495,11 @@ func unsignedKaratsubaMultiplication(a: var BigInt, bLimbs, cLimbs: openArray[Li
   if cl == 1:
     unsignedMultiplicationInt(a, bLimbs, cLimbs[0])
     return
-  if bl < karatsubaThreshold:
-    if cl <= bl:
-      unsignedMultiplication(a, bLimbs, cLimbs)
+  if bl < karatsubaThreshold or cl < karatsubaThreshold:
+    if bl >= cl:
+      unsignedLongMultiplication(a, bLimbs, cLimbs)
     else:
-      unsignedMultiplication(a, cLimbs, bLimbs)
-    return
-  if cl < karatsubaThreshold:
-    if bl <= cl:
-      unsignedMultiplication(a, cLimbs, bLimbs)
-    else:
-      unsignedMultiplication(a, bLimbs, cLimbs)
+      unsignedLongMultiplication(a, cLimbs, bLimbs)
     return
   # Decompose `b` and `c` in two parts of (almost) equal length
   template low_b: openArray[Limb] = bLimbs.toOpenArray(0, k-1)
