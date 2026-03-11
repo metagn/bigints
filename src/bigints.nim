@@ -504,10 +504,24 @@ func unsignedKaratsubaMultiplication(a: var BigInt, bLimbs, cLimbs: openArray[Li
       unsignedLongMultiplication(a, cLimbs, bLimbs)
     return
   # Decompose `b` and `c` in two parts of (almost) equal length
-  template low_b: openArray[Limb] = bLimbs.toOpenArray(0, k-1)
-  template high_b: openArray[Limb] = bLimbs.toOpenArray(k, bl-1)
-  template low_c: openArray[Limb] = cLimbs.toOpenArray(0, k-1)
-  template high_c: openArray[Limb] = cLimbs.toOpenArray(k, cl-1)
+  template openArrayCompat(a, b) =
+    when (NimMajor, NimMinor, NimPatch) >= (1, 6, 10):
+      a
+    else:
+      when nimvm:
+        b
+      else:
+        a
+  openArrayCompat:
+    template low_b: openArray[Limb] = bLimbs.toOpenArray(0, k-1)
+    template high_b: openArray[Limb] = bLimbs.toOpenArray(k, bl-1)
+    template low_c: openArray[Limb] = cLimbs.toOpenArray(0, k-1)
+    template high_c: openArray[Limb] = cLimbs.toOpenArray(k, cl-1)
+  do:
+    let low_b = bLimbs[0 .. (k-1)]
+    let high_b = bLimbs[k .. (bl-1)]
+    let low_c = cLimbs[0 .. (k-1)]
+    let high_c = cLimbs[k .. (cl-1)]
   
   # subtractive version of Karatsuba's algorithm to limit carry handling
   var lowProduct, highProduct, add3, add4, add5, middleTerm: BigInt = zero
